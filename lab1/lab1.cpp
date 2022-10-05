@@ -189,7 +189,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             int lhs = GetDlgItemInt(hWnd, IDC_LHS, &success, true);
            //  std::string test1 = std::to_string(lhs);
            // MessageBoxA(hWnd, test1.c_str(), "testx", MB_OK);
-            SendMessage((HWND)lParam, BM_SETSTATE, TRUE, 0L);
+            //SendMessage((HWND)lParam, BM_SETSTATE, TRUE, 0L);
 
 
             if (!success) {
