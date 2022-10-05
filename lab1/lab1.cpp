@@ -4,9 +4,11 @@
 
 #include "framework.h"
 #include "lab1.h"
+#include <string>
+
 
 #define MAX_LOADSTRING 100
-enum operation { ADD, SUB, MULT, REM };
+enum  operation { ADD, SUB, MULT, REM };
 operation op = ADD;
 
 // Global Variables:
@@ -100,9 +102,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
-
+  
+   //param 6,7 - window size
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW| WS_CAPTION|WS_SYSMENU|WS_MAXIMIZEBOX,
-      CW_USEDEFAULT, 0,200,200,NULL,NULL, hInstance, NULL);
+      CW_USEDEFAULT, 0,410,110,NULL,NULL, hInstance, NULL);
 
    if (!hWnd)
    {
@@ -127,20 +130,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static HWND hButton1, hButton2, hEdit;
+    //static HWND hButton1, hButton2, hEdit;
 
     switch (message)
     {
     case WM_CREATE:
     {
-        CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("EDIT"), TEXT("0"), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | WS_TABSTOP, 
-            20, 10, 85, 25, hWnd, (HMENU)IDC_LHS, GetModuleHandle(NULL), NULL); 
         CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("EDIT"), TEXT("0"), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | WS_TABSTOP,
-            20, 45, 85, 25, hWnd, (HMENU)IDC_LHS, GetModuleHandle(NULL), NULL);
+            20, 10, 85, 25, hWnd, (HMENU)IDC_LHS, GetModuleHandle(NULL), NULL);
         CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("EDIT"), TEXT("0"), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | WS_TABSTOP,
-            20, 85, 85, 25, hWnd, (HMENU)IDC_LHS, GetModuleHandle(NULL), NULL);
+            175, 10, 85, 25, hWnd, (HMENU)IDC_RHS, GetModuleHandle(NULL), NULL);
+        CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("EDIT"), TEXT("0"), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | WS_TABSTOP,
+            290, 10, 85, 25, hWnd, (HMENU)IDC_RESULT, GetModuleHandle(NULL), NULL);
         CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("+"), WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_TABSTOP,
-            115, 45, 30, 25, hWnd, (HMENU)IDC_LHS, GetModuleHandle(NULL), NULL);
+            125, 10, 30, 25, hWnd, (HMENU)IDC_OPBUTTON, GetModuleHandle(NULL), NULL);
 
         break;
         //hButton2 = CreateWindow(L"button", L"Нижняя кнопка", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
@@ -149,96 +152,101 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //    400, 400, 300, 30, hWnd, (HMENU)EDIT_ID, hInst, NULL);
        // return 0;
 
-    }
-    case IDM_ADD:
-    {
-        SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("+"));
-        op = ADD;
-        break;
-    }
-    case IDM_SUB:
-    {
-        SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("-"));
-        op = SUB;
-        break;
-    }
-    case IDM_MULT:
-    {
-        SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("*"));
-        op = MULT;
-        break;
-    }
-    case IDM_REM:
-    {
-        SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("%"));
-        op = REM;
-        break;
-    }
-    case IDC_OPBUTTON:
-    {
-        BOOL success = false;
-        int lhs = GetDlgItemInt(hWnd, IDC_LHS, &success, true);
-        if (!success) {
-            MessageBox(hWnd, TEXT("The first expression is incorrect"), TEXT("Error"), MB_OK);
-                break;
-        }
-        int rhs = GetDlgItemInt(hWnd, IDC_LHS, &success, true);
-        if (!success) {
-            MessageBox(hWnd, TEXT("The second expression is incorrect"), TEXT("Error"), MB_OK);
-                break;
-        }
-        int result = 0;
-        switch (op) {
-        case ADD:
-            result = lhs + rhs;
-            break;
-        case SUB:
-            result = lhs - rhs;
-            break;
-        case MULT:
-            result = lhs * rhs;
-            break;
-        case REM:
-            if (rhs == 0) {
-                SetDlgItemText(hWnd, IDC_RESULT, TEXT("Underfined"));
-                return 0;
-            }
-            else {
-                result = lhs % rhs;
-            }
 
-        }
-        SetDlgItemInt(hWnd, IDC_RESULT, result, true);
-        break;
-    }
 
     case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
         {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+        case IDM_ABOUT:
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        case IDM_ADD:
+            SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("+"));
+            op = ADD;
+            break;
+        case IDM_SUB:
+            SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("-"));
+            op = SUB;
+            break;
+        case IDM_MULT:
+            SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("*"));
+            op = MULT;
+            break;
+        case IDM_REM:
+            SetDlgItemText(hWnd, IDC_OPBUTTON, TEXT("%"));
+            op = REM;
+            break;
+            // case IDM_SUB:
+        case IDC_OPBUTTON:
+        {
+            BOOL success = false;
+            int lhs = GetDlgItemInt(hWnd, IDC_LHS, &success, true);
+           //  std::string test1 = std::to_string(lhs);
+           // MessageBoxA(hWnd, test1.c_str(), "testx", MB_OK);
+            SendMessage((HWND)lParam, BM_SETSTATE, TRUE, 0L);
+
+
+            if (!success) {
+                MessageBox(hWnd, TEXT("The first expression is incorrect"), TEXT("Error"), MB_OK);
                 break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
             }
+            int rhs = GetDlgItemInt(hWnd, IDC_RHS, &success, true);
+            //std::string test2 = std::to_string(rhs);
+           // MessageBoxA(hWnd, test2.c_str(), "testx", MB_OK);
+
+            if (!success) {
+                MessageBox(hWnd, TEXT("The second expression is incorrect"), TEXT("Error"), MB_OK);
+                break;
+            }
+            int result = 0;
+            switch (op) {
+            case ADD:
+                result = lhs + rhs;
+                break;
+            case SUB:
+                result = lhs - rhs;
+                break;
+            case MULT:
+                result = lhs * rhs;
+                break;
+            case REM:
+                if (rhs == 0) {
+                    SetDlgItemText(hWnd, IDC_RESULT, TEXT("UNDERFINED"));
+                    return 0;
+                }
+                else {
+                    result = lhs % rhs;
+                }
+
+            }
+
+            SetDlgItemInt(hWnd, IDC_RESULT, result, true);
+            break;
         }
-        break;
+
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
+        }
+    }
+    break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            MoveToEx(hdc, 10, 78, NULL); 
-            LineTo(hdc, 115, 78);
-            //  Add any drawing code that uses hdc here...
-            EndPaint(hWnd, &ps);
-        }
-        break;
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        MoveToEx(hdc, 270, 20, NULL);
+        LineTo(hdc, 280, 20);
+        MoveToEx(hdc, 270, 25, NULL);
+        LineTo(hdc, 280, 25);
+        //  Add any drawing code that uses hdc here...
+        EndPaint(hWnd, &ps);
+    }
+    break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -246,6 +254,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
+    }
 }
 
 // Message handler for about box.

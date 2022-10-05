@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by lab1.rc
 
-#define IDS_APP_TITLE			103
+#define IDS_APP_TITLE			118
 
 #define IDR_MAINFRAME			128
 #define IDD_LAB1_DIALOG	102
@@ -16,14 +16,14 @@
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
 
-#define IDM_ADD					110
-#define IDM_SUB					112
-#define IDM_MULT					113
-#define IDM_REM					114
-#define IDC_RHS					115
-#define IDC_LHS					116
-#define IDC_RESULT					117
-#define IDC_OPBUTTON					118
+#define IDM_ADD					118
+#define IDM_SUB					111
+#define IDM_MULT					112
+#define IDM_REM					113
+#define IDC_RHS					114
+#define IDC_LHS					115
+#define IDC_RESULT					116
+#define IDC_OPBUTTON					117
 
 
 #endif
